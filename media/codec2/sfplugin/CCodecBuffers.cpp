@@ -520,6 +520,10 @@ bool FlexBuffersImpl::releaseSlot(
     }
     std::shared_ptr<C2Buffer> result = mBuffers[index].compBuffer.lock();
     if (!result) {
+        if (!c2buffer) {
+            clientBuffer->clearC2BufferRefs();
+            return true;
+        }
         result = clientBuffer->asC2Buffer();
         clientBuffer->clearC2BufferRefs();
         mBuffers[index].compBuffer = result;
@@ -640,6 +644,10 @@ bool BuffersArrayImpl::returnBuffer(
     ALOGV("[%s] %s: matching buffer found (index=%zu)", mName, __func__, index);
     std::shared_ptr<C2Buffer> result = mBuffers[index].compBuffer.lock();
     if (!result) {
+        if (!c2buffer) {
+            clientBuffer->clearC2BufferRefs();
+            return true;
+        }
         result = clientBuffer->asC2Buffer();
         clientBuffer->clearC2BufferRefs();
         mBuffers[index].compBuffer = result;
